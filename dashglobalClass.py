@@ -85,7 +85,7 @@ def convert_gse_to_numeric(gse_value):
 
 # Main content based on selected menu option
 if selected == "Dashboard":
-    st.title("📊 Dashboard Analisis Siswa")
+    st.title("📊 Dashboard Analisis Global Student")
     st.markdown("Selamat datang di dashboard kami! Di sini Anda dapat melihat analisis data secara interaktif.")
 
     if st.session_state.df is not None:
