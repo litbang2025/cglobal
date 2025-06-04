@@ -86,7 +86,7 @@ def convert_gse_to_numeric(gse_value):
 
 # Main content based on selected menu option
 if selected == "Dashboard":
-    st.title("📊 Dashboard Analisis Siswa")  # Title for the dashboard
+    st.title("📊 Dashboard Global Class")  # Title for the dashboard
     st.markdown("Selamat datang di dashboard kami! Di sini Anda dapat melihat analisis data secara interaktif.")
 
     if st.session_state.df is not None:
@@ -418,7 +418,7 @@ elif selected == "Tentang":
     Semua hak dilindungi. Dilarang memperbanyak, mendistribusikan, atau 
     menggunakan bagian dari aplikasi ini tanpa izin tertulis dari pemilik hak cipta. 
     Penggunaan aplikasi ini sepenuhnya untuk tujuan pendidikan dan analisis data. 
-    Jika Anda memiliki pertanyaan atau memerlukan izin, silakan hubungi [email@example.com].
+    Jika Anda memiliki pertanyaan atau memerlukan izin, silakan hubungi [kreatif.appmobile@gmail.com].
     """)
 
     # Closing Remarks
