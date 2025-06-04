@@ -3,8 +3,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from streamlit_option_menu import option_menu
+from sklearn.cluster import KMeans
 from wordcloud import WordCloud
 import numpy as np
+import plotly.graph_objects as go
 
 # Set page configuration
 st.set_page_config(page_title="Analisis Lengkap Data Siswa", layout="wide")
@@ -352,8 +354,8 @@ elif selected == "Visualisasi":
         else:
             st.warning("Silakan unggah data terlebih dahulu di menu 'Data Upload'.")  # Warning if no students are selected
 
-else:
-    st.warning("Silakan unggah data terlebih dahulu di menu 'Data Upload'.")  # Warning if no data is uploaded
+    else:
+        st.warning("Silakan unggah data terlebih dahulu di menu 'Data Upload'.")  # Warning if no data is uploaded
 
 # Tentang Section
 elif selected == "Tentang":
