@@ -159,12 +159,11 @@ elif selected == "Visualisasi":
     if st.session_state.df is not None:
         # Convert 'GSE' values to numeric
         st.session_state.df['GSE'] = st.session_state.df['GSE'].apply(convert_gse_to_numeric)
-
         # Ensure other numeric columns are converted
         numeric_columns = ['Nilai_IQ', 'Listening', 'Reading', 'Speaking', 'Writing']
         for col in numeric_columns:
             st.session_state.df[col] = pd.to_numeric(st.session_state.df[col], errors='coerce')
-
+            
         # Filter data
         with st.expander("🔍 Filter Data", expanded=True):
             unit_opt = st.multiselect("Pilih Unit", st.session_state.df['Unit'].unique(), default=list(st.session_state.df['Unit'].unique()))
