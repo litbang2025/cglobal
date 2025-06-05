@@ -3,10 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from streamlit_option_menu import option_menu
-from sklearn.cluster import KMeans
-from wordcloud import WordCloud
 import numpy as np
-import plotly.graph_objects as go
 
 # Set page configuration
 st.set_page_config(page_title="Analisis Lengkap Data Siswa", layout="wide")
@@ -94,11 +91,9 @@ if selected == "Dashboard":
         st.session_state.df['GSE'] = st.session_state.df['GSE'].apply(convert_gse_to_numeric)
 
         # Ensure other numeric columns are converted
-        st.session_state.df['Nilai_IQ'] = pd.to_numeric(st.session_state.df['Nilai_IQ'], errors='coerce')
-        st.session_state.df['Listening'] = pd.to_numeric(st.session_state.df['Listening'], errors='coerce')
-        st.session_state.df['Reading'] = pd.to_numeric(st.session_state.df['Reading'], errors='coerce')
-        st.session_state.df['Speaking'] = pd.to_numeric(st.session_state.df['Speaking'], errors='coerce')
-        st.session_state.df['Writing'] = pd.to_numeric(st.session_state.df['Writing'], errors='coerce')
+        numeric_columns = ['Nilai_IQ', 'Listening', 'Reading', 'Speaking', 'Writing']
+        for column in numeric_columns:
+            st.session_state.df[column] = pd.to_numeric(st.session_state.df[column], errors='coerce')
 
         # Example metrics based on the uploaded data
         total_students = len(st.session_state.df)  # Total number of students
@@ -166,11 +161,9 @@ elif selected == "Visualisasi":
         st.session_state.df['GSE'] = st.session_state.df['GSE'].apply(convert_gse_to_numeric)
 
         # Ensure other numeric columns are converted
-        st.session_state.df['Nilai_IQ'] = pd.to_numeric(st.session_state.df['Nilai_IQ'], errors='coerce')
-        st.session_state.df['Listening'] = pd.to_numeric(st.session_state.df['Listening'], errors='coerce')
-        st.session_state.df['Reading'] = pd.to_numeric(st.session_state.df['Reading'], errors='coerce')
-        st.session_state.df['Speaking'] = pd.to_numeric(st.session_state.df['Speaking'], errors='coerce')
-        st.session_state.df['Writing'] = pd.to_numeric(st.session_state.df['Writing'], errors='coerce')
+        numeric_columns = ['Nilai_IQ', 'Listening', 'Reading', 'Speaking', 'Writing']
+        for column in numeric_columns:
+            st.session_state.df[column] = pd.to_numeric(st.session_state.df[column], errors='coerce')
 
         # Filter data
         with st.expander("🔍 Filter Data", expanded=True):
@@ -427,4 +420,3 @@ elif selected == "Tentang":
     Kami berharap aplikasi ini dapat membantu Anda dalam memahami dan 
     meningkatkan performa siswa. 
     """)
-
