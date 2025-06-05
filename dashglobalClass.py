@@ -70,7 +70,7 @@ if 'df' not in st.session_state:
 
 # Main content based on selected menu option
 if selected == "Dashboard":
-    st.title("📊 Dashboard Analisis Siswa")
+    st.title("📊 Dashboard Analisis Test Global")
     st.markdown("Selamat datang di dashboard kami! Di sini Anda dapat melihat analisis data secara interaktif.")
 
     if st.session_state.df is not None:
@@ -270,4 +270,4 @@ elif selected == "Visualisasi":
 
 elif selected == "Tentang":
     st.title("ℹ️ Tentang Aplikasi")
-    st.markdown("Aplikasi ini bertujuan untuk memberikan analisis data siswa secara interaktif.")
+    st.markdown("Aplikasi ini bertujuan untuk memberikan analisis data siswa secara interaktif khususnya data kelas global. By litbang ihbs")
