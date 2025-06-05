@@ -72,6 +72,7 @@ if 'df' not in st.session_state:
 
 # Function to convert GSE ranges to numeric values
 def convert_gse_to_numeric(gse_value):
+    """Convert GSE string values to numeric values."""
     mapping = {
         "Below Level": 1,
         "Level 1": 2,
@@ -80,15 +81,6 @@ def convert_gse_to_numeric(gse_value):
         "Above Level": 5
     }
     return mapping.get(gse_value, np.nan)  # Return NaN if value not found
-
-# Function to convert skill levels to numeric values
-def convert_skill_to_numeric(skill_value):
-    mapping = {
-        "Below level": 1,
-        "At level": 2,
-        "Above level": 3
-    }
-    return mapping.get(skill_value, np.nan)  # Return NaN if value not found
 
 # Main content based on selected menu option
 if selected == "Dashboard":
@@ -101,10 +93,10 @@ if selected == "Dashboard":
 
         # Ensure other numeric columns are converted
         st.session_state.df['Nilai_IQ'] = pd.to_numeric(st.session_state.df['Nilai_IQ'], errors='coerce')
-        st.session_state.df['Listening'] = st.session_state.df['Listening'].apply(convert_skill_to_numeric)
-        st.session_state.df['Reading'] = st.session_state.df['Reading'].apply(convert_skill_to_numeric)
-        st.session_state.df['Speaking'] = st.session_state.df['Speaking'].apply(convert_skill_to_numeric)
-        st.session_state.df['Writing'] = st.session_state.df['Writing'].apply(convert_skill_to_numeric)
+        st.session_state.df['Listening'] = pd.to_numeric(st.session_state.df['Listening'], errors='coerce')
+        st.session_state.df['Reading'] = pd.to_numeric(st.session_state.df['Reading'], errors='coerce')
+        st.session_state.df['Speaking'] = pd.to_numeric(st.session_state.df['Speaking'], errors='coerce')
+        st.session_state.df['Writing'] = pd.to_numeric(st.session_state.df['Writing'], errors='coerce')
 
         # Example metrics based on the uploaded data
         total_students = len(st.session_state.df)  # Total number of students
@@ -173,14 +165,10 @@ elif selected == "Visualisasi":
 
         # Ensure other numeric columns are converted
         st.session_state.df['Nilai_IQ'] = pd.to_numeric(st.session_state.df['Nilai_IQ'], errors='coerce')
-        st.session_state.df['Listening'] = st.session_state.df['Listening'].apply(convert_skill_to_numeric)
-        st.session_state.df['Reading'] = st.session_state.df['Reading'].apply(convert_skill_to_numeric)
-        st.session_state.df['Speaking'] = st.session_state.df['Speaking'].apply(convert_skill_to_numeric)
-        st.session_state.df['Writing'] = st.session_state.df['Writing'].apply(convert_skill_to_numeric)
-
-        # Check for NaN values and handle them
-        if st.session_state.df[['Listening', 'Reading', 'Speaking', 'Writing']].isna().sum().any():
-            st.warning("Beberapa kolom kemampuan bahasa mengandung nilai NaN. Visualisasi mungkin tidak akurat.")  # Warning for NaN values
+        st.session_state.df['Listening'] = pd.to_numeric(st.session_state.df['Listening'], errors='coerce')
+        st.session_state.df['Reading'] = pd.to_numeric(st.session_state.df['Reading'], errors='coerce')
+        st.session_state.df['Speaking'] = pd.to_numeric(st.session_state.df['Speaking'], errors='coerce')
+        st.session_state.df['Writing'] = pd.to_numeric(st.session_state.df['Writing'], errors='coerce')
 
         # Filter data
         with st.expander("🔍 Filter Data", expanded=True):
@@ -364,8 +352,8 @@ elif selected == "Visualisasi":
         else:
             st.warning("Silakan unggah data terlebih dahulu di menu 'Data Upload'.")  # Warning if no students are selected
 
-    else:
-        st.warning("Silakan unggah data terlebih dahulu di menu 'Data Upload'.")  # Warning if no data is uploaded
+else:
+    st.warning("Silakan unggah data terlebih dahulu di menu 'Data Upload'.")  # Warning if no data is uploaded
 
 # Tentang Section
 elif selected == "Tentang":
@@ -437,3 +425,4 @@ elif selected == "Tentang":
     Kami berharap aplikasi ini dapat membantu Anda dalam memahami dan 
     meningkatkan performa siswa. 
     """)
+
