@@ -207,21 +207,21 @@ elif selected == "Visualisasi":
             # Explanation for GSE Distribution
             st.markdown(f"**Rata-rata GSE**: {df_filtered['GSE'].mean():.2f}, **Nilai GSE Tertinggi**: {df_filtered['GSE'].max()}, **Nilai GSE Terendah**: {df_filtered['GSE'].min()}")
 
-        # Kemampuan Bahasa
+        # Kemampuan Bahasa (Listening, Reading, Speaking, Writing)
         st.markdown("#### 🗣️ Kemampuan Bahasa (Listening, Reading, Speaking, Writing)")
         skill_cols = ['Listening', 'Reading', 'Speaking', 'Writing']
         for col in skill_cols:
             st.markdown(f"##### {col}")
             fig, ax = plt.subplots()
-            sns.countplot(data=df_filtered, x=col, palette='pastel', ax=ax)
+            # Use histogram for continuous numeric data visualization
+            sns.histplot(data=df_filtered, x=col, kde=True, color='skyblue', ax=ax)
             ax.set_title(f"Distribusi {col}", fontsize=14)
             ax.set_xlabel(col, fontsize=12)
-            ax.set_ylabel("Jumlah", fontsize=12)
+            ax.set_ylabel("Frekuensi", fontsize=12)
             st.pyplot(fig)
-
             # Explanation for Language Skills
-            skill_counts = df_filtered[col].value_counts()
-            st.markdown(f"**Jumlah Siswa per {col}**: {skill_counts.to_dict()}")
+            skill_stats = df_filtered[col].describe()
+            st.markdown(f"**Statistik {col}**: Mean={skill_stats['mean']:.2f}, Median={skill_stats['50%']:.2f}, Min={skill_stats['min']}, Max={skill_stats['max']}")
 
         # IQ & Kategori IQ
         st.markdown("#### 🧠 Distribusi IQ")
