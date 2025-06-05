@@ -345,49 +345,46 @@ elif selected == "Visualisasi":
                 st.markdown(explanation)
 
         else:
-            st.warning("Silakan unggah data terlebih dahulu di menu 'Data Upload'.")
+            st.warning("Silakan pilih siswa untuk melihat rincian.")
 
-    else:
-        st.warning("Silakan unggah data terlebih dahulu di menu 'Data Upload'.")
+        # Additional Features
+        st.subheader("📊 Fitur Visualisasi Tambahan")
 
-# Additional Features
-    st.subheader("📊 Fitur Visualisasi Tambahan")
-
-    # Heatmap Korelasi
-    st.markdown("🌡️ Heatmap Korelasi")
+        # Heatmap Korelasi
+        st.markdown("🌡️ Heatmap Korelasi")
         corr = df_filtered[['GSE', 'Nilai_IQ', 'Listening', 'Reading', 'Speaking', 'Writing']].corr()
         fig_corr, ax_corr = plt.subplots()
-        sns.heatmap(corr, annot=True, cmap="YlGnBu", ax=ax_corr)  # Fixed line
+        sns.heatmap(corr, annot=True, cmap="YlGnBu", ax=ax_corr)  # Fixed cmap string and ax param
         ax_corr.set_title("Korelasi antara GSE, IQ, dan Kemampuan Bahasa")
         st.pyplot(fig_corr)
 
-    # Word Cloud
-    if 'Komentar' in df_filtered.columns:
-        st.markdown("🌬️ Word Cloud Komentar Siswa")
-        comments = ' '.join(df_filtered['Komentar'].dropna())
-        wordcloud = WordCloud(width=800, height=400).generate(comments)
-        
-        plt.figure(figsize=(10, 5))
-        plt.imshow(wordcloud, interpolation='bilinear')
-        plt.axis('off')
-        st.pyplot(plt)
+        # Word Cloud
+        if 'Komentar' in df_filtered.columns:
+            st.markdown("🌬️ Word Cloud Komentar Siswa")
+            comments = ' '.join(df_filtered['Komentar'].dropna())
+            wordcloud = WordCloud(width=800, height=400).generate(comments)
+            
+            plt.figure(figsize=(10, 5))
+            plt.imshow(wordcloud, interpolation='bilinear')
+            plt.axis('off')
+            st.pyplot(plt)
 
-    # Radar Chart for Skills
-    st.markdown("🛡️ Radar Chart Profil Kemampuan Siswa")
-    for student in selected_students:
-        student_data = df_filtered[df_filtered['Nama_Peserta'] == student][['Listening', 'Reading', 'Speaking', 'Writing']].mean()
-        values = student_data.values
-        values = np.concatenate((values, [values[0]]))  # Close the circle
-        angles = np.linspace(0, 2 * np.pi, len(student_data), endpoint=False).tolist()
-        angles += angles[:1]
+        # Radar Chart for Skills
+        st.markdown("🛡️ Radar Chart Profil Kemampuan Siswa")
+        for student in selected_students:
+            student_data = df_filtered[df_filtered['Nama_Peserta'] == student][['Listening', 'Reading', 'Speaking', 'Writing']].mean()
+            values = student_data.values
+            values = np.concatenate((values, [values[0]]))  # Close the circle
+            angles = np.linspace(0, 2 * np.pi, len(student_data), endpoint=False).tolist()
+            angles += angles[:1]
 
-        fig_radar, ax_radar = plt.subplots(figsize=(6, 6), subplot_kw=dict(polar=True))
-        ax_radar.fill(angles, values, color='red', alpha=0.25)
-        ax_radar.set_yticklabels([])
-        ax_radar.set_xticks(angles[:-1])
-        ax_radar.set_xticklabels(student_data.index)
-        ax_radar.set_title(f"Profil Kemampuan: {student}")
-        st.pyplot(fig_radar)
+            fig_radar, ax_radar = plt.subplots(figsize=(6, 6), subplot_kw=dict(polar=True))
+            ax_radar.fill(angles, values, color='red', alpha=0.25)
+            ax_radar.set_yticklabels([])
+            ax_radar.set_xticks(angles[:-1])
+            ax_radar.set_xticklabels(student_data.index)
+            ax_radar.set_title(f"Profil Kemampuan: {student}")
+            st.pyplot(fig_radar)
 
     else:
         st.warning("Silakan unggah data terlebih dahulu di menu 'Data Upload'.")
@@ -452,7 +449,7 @@ elif selected == "Tentang":
     Semua hak dilindungi. Dilarang memperbanyak, mendistribusikan, atau 
     menggunakan bagian dari aplikasi ini tanpa izin tertulis dari pemilik hak cipta. 
     Penggunaan aplikasi ini sepenuhnya untuk tujuan pendidikan dan analisis data. 
-    Jika Anda memiliki pertanyaan atau memerlukan izin, silakan hubungi [kreatif.appmobile.gmail.com].
+    Jika Anda memiliki pertanyaan atau memerlukan izin, silakan hubungi [kreatif.appmobile@gmail.com].
     """)
 
     # Closing Remarks
