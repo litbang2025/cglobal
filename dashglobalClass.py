@@ -355,11 +355,11 @@ elif selected == "Visualisasi":
 
     # Heatmap Korelasi
     st.markdown("🌡️ Heatmap Korelasi")
-    corr = df_filtered[['GSE', 'Nilai_IQ', 'Listening', 'Reading', 'Speaking', 'Writing']].corr()
-    fig_corr, ax_corr = plt.subplots()
-    sns.heatmap(corr, annot=True, cmap="YlGn Bu, ax_corr)
-    ax_corr.set_title("Korelasi antara GSE, IQ, dan Kemampuan Bahasa")
-    st.pyplot(fig_corr)
+        corr = df_filtered[['GSE', 'Nilai_IQ', 'Listening', 'Reading', 'Speaking', 'Writing']].corr()
+        fig_corr, ax_corr = plt.subplots()
+        sns.heatmap(corr, annot=True, cmap="YlGnBu", ax=ax_corr)  # Fixed line
+        ax_corr.set_title("Korelasi antara GSE, IQ, dan Kemampuan Bahasa")
+        st.pyplot(fig_corr)
 
     # Word Cloud
     if 'Komentar' in df_filtered.columns:
