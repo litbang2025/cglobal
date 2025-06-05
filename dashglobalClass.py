@@ -3,10 +3,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from streamlit_option_menu import option_menu
-from sklearn.cluster import KMeans
-from wordcloud import WordCloud
-import numpy as np
-import plotly.graph_objects as go
 
 # Set page configuration
 st.set_page_config(page_title="Analisis Lengkap Data Siswa", layout="wide")
@@ -72,39 +68,21 @@ with st.sidebar:
 if 'df' not in st.session_state:
     st.session_state.df = None
 
-# Function to convert GSE ranges to numeric values
-def convert_gse_to_numeric(gse_value):
-    mapping = {
-        "Below Level": 1,
-        "Level 1": 2,
-        "Level 2": 3,
-        "Level 3": 4,
-        "Above Level": 5
-    }
-    return mapping.get(gse_value, np.nan)  # Return NaN if value not found
-
 # Main content based on selected menu option
 if selected == "Dashboard":
     st.title("📊 Dashboard Analisis Siswa")
     st.markdown("Selamat datang di dashboard kami! Di sini Anda dapat melihat analisis data secara interaktif.")
 
     if st.session_state.df is not None:
-        # Convert 'GSE' values to numeric
-        st.session_state.df['GSE'] = st.session_state.df['GSE'].apply(convert_gse_to_numeric)
-
-        # Ensure other numeric columns are converted
-        st.session_state.df['Nilai_IQ'] = pd.to_numeric(st.session_state.df['Nilai_IQ'], errors='coerce')
-        st.session_state.df['Listening'] = pd.to_numeric(st.session_state.df['Listening'], errors='coerce')
-        st.session_state.df['Reading'] = pd.to_numeric(st.session_state.df['Reading'], errors='coerce')
-        st.session_state.df['Speaking'] = pd.to_numeric(st.session_state.df['Speaking'], errors='coerce')
-        st.session_state.df['Writing'] = pd.to_numeric(st.session_state.df['Writing'], errors='coerce')
-
+        # Ensure 'GSE' is numeric
+        st.session_state.df['GSE'] = pd.to_numeric(st.session_state.df['GSE'], errors='coerce')
+        
         # Example metrics based on the uploaded data
         total_students = len(st.session_state.df)
         passed_students = len(st.session_state.df[st.session_state.df['Keterangan'] == 'Lulus'])
         not_passed_students = len(st.session_state.df[st.session_state.df['Keterangan'] != 'Lulus'])
         waiting_list_students = len(st.session_state.df[st.session_state.df['Keterangan'] == 'Waiting List'])
-        above_level_students = len(st.session_state.df[st.session_state.df['GSE'] > 3])  # Example threshold for GSE
+        above_level_students = len(st.session_state.df[st.session_state.df['GSE'] > 5])  # Example threshold for GSE
 
         # Dashboard summary
         col1, col2, col3, col4 = st.columns(4)
@@ -117,7 +95,7 @@ if selected == "Dashboard":
         with col4:
             st.metric("Waiting List", waiting_list_students)
 
-        st.markdown(f"**Jumlah di atas level GSE 3**: {above_level_students}")
+        st.markdown(f"**Jumlah di atas level GSE 5**: {above_level_students}")
 
         # Display counts for each category
         st.subheader("📊 Rincian Kategori")
@@ -131,15 +109,6 @@ if selected == "Dashboard":
         st.markdown("### Rincian Kategori")
         for kategori, count in kategori_counts.items():
             st.markdown(f"- **{kategori}**: {count} siswa")
-
-        # Recommendations for intervention
-        with st.expander("Rekomendasi Aksi / Intervensi"):
-            remedial_students = st.session_state.df[(st.session_state.df['GSE'] < 3) & (st.session_state.df['Unit'] == 'A')]
-            count_remedial = len(remedial_students)
-            if count_remedial > 0:
-                st.markdown(f"**{count_remedial} siswa dari Unit A dengan GSE < 3 disarankan untuk mengikuti program remedial.**")
-            else:
-                st.markdown("Tidak ada siswa dari Unit A yang disarankan untuk program remedial.")
 
     else:
         st.warning("Silakan unggah data terlebih dahulu di menu 'Data Upload'.")
@@ -161,15 +130,8 @@ elif selected == "Visualisasi":
     st.markdown("Di sini Anda dapat melihat visualisasi data.")
     
     if st.session_state.df is not None:
-        # Convert 'GSE' values to numeric
-        st.session_state.df['GSE'] = st.session_state.df['GSE'].apply(convert_gse_to_numeric)
-
-        # Ensure other numeric columns are converted
-        st.session_state.df['Nilai_IQ'] = pd.to_numeric(st.session_state.df['Nilai_IQ'], errors='coerce')
-        st.session_state.df['Listening'] = pd.to_numeric(st.session_state.df['Listening'], errors='coerce')
-        st.session_state.df['Reading'] = pd.to_numeric(st.session_state.df['Reading'], errors='coerce')
-        st.session_state.df['Speaking'] = pd.to_numeric(st.session_state.df['Speaking'], errors='coerce')
-        st.session_state.df['Writing'] = pd.to_numeric(st.session_state.df['Writing'], errors='coerce')
+        # Ensure 'GSE' is numeric
+        st.session_state.df['GSE'] = pd.to_numeric(st.session_state.df['GSE'], errors='coerce')
 
         # Filter data
         with st.expander("🔍 Filter Data", expanded=True):
@@ -255,7 +217,7 @@ elif selected == "Visualisasi":
             kategori_counts = df_filtered['Kategori'].value_counts()
             st.markdown(f"**Jumlah Siswa per Kategori IQ**: {kategori_counts.to_dict()}")
 
-        # Kemampuan Psikologis (T/ST)
+        # Karakteristik Psikologis (T/ST)
         st.markdown("#### 🧩 Analisis Karakteristik Psikologis")
         char_cols = [col for col in st.session_state.df.columns if st.session_state.df[col].isin(['T', 'ST']).any()]
         if char_cols:
@@ -280,56 +242,11 @@ elif selected == "Visualisasi":
             student_details = df_filtered[df_filtered['Nama_Peserta'].isin(selected_students)]
             st.dataframe(student_details)
 
-            # Visualizations for Selected Students
+           # Visualizations for Selected Students
             st.subheader("📊 Visualisasi Siswa Terpilih")
             for student in selected_students:
                 student_data = df_filtered[df_filtered['Nama_Peserta'] == student]
-
-                # Calculate metrics for the selected student
-                average_gse = student_data['GSE'].mean()
-                average_iq = student_data['Nilai_IQ'].mean()
-                average_listening = student_data['Listening'].mean()
-                average_reading = student_data['Reading'].mean()
-                average_speaking = student_data['Speaking'].mean()
-                average_writing = student_data['Writing'].mean()
-
-                # Generate automated explanation
-                explanation = f"### Analisis untuk {student}\n"
-                explanation += f"1. **Rata-rata GSE**: {average_gse:.2f}\n"
-                explanation += f"   - GSE adalah ukuran kemampuan siswa dalam skala 1 hingga 5. "
-                explanation += f"Rata-rata GSE {average_gse:.2f} menunjukkan bahwa siswa ini berada pada "
-                if average_gse < 3:
-                    explanation += "kategorisasi 'Below Level', yang menunjukkan bahwa siswa mungkin memerlukan dukungan tambahan."
-                elif 3 <= average_gse < 4:
-                    explanation += "kategorisasi 'Level 1' hingga 'Level 2', yang menunjukkan bahwa siswa berada pada tingkat dasar dan perlu perhatian lebih."
-                else:
-                    explanation += "kategorisasi 'Level 3' hingga 'Above Level', yang menunjukkan bahwa siswa berada pada tingkat yang baik."
-
-                explanation += f"\n2. **Rata-rata Nilai IQ**: {average_iq:.2f}\n"
-                explanation += f"   - Nilai IQ rata-rata {average_iq:.2f} menunjukkan kemampuan kognitif siswa. "
-                if average_iq < 85:
-                    explanation += "Ini menunjukkan bahwa siswa mungkin memerlukan pendekatan pembelajaran yang lebih mendukung."
-                elif 85 <= average_iq < 100:
-                    explanation += "Ini menunjukkan bahwa siswa berada pada tingkat rata-rata dan dapat mengikuti pembelajaran dengan baik."
-                else:
-                    explanation += "Ini menunjukkan bahwa siswa memiliki kemampuan di atas rata-rata dan mungkin dapat mengambil tantangan lebih besar."
-
-                # Add language skills analysis
-                explanation += f"\n3. **Kemampuan Bahasa**:\n"
-                explanation += f"   - Listening: {average_listening:.2f}\n"
-                explanation += f"   - Reading: {average_reading:.2f}\n"
-                explanation += f"   - Speaking: {average_speaking:.2f}\n"
-                explanation += f"   - Writing: {average_writing:.2f}\n"
                 
-                # Recommendations based on performance
-                explanation += "### Rekomendasi:\n"
-                if average_gse < 3:
-                    explanation += "- Disarankan untuk mengikuti program remedial untuk meningkatkan pemahaman dasar.\n"
-                elif average_gse < 4:
-                    explanation += "- Siswa disarankan untuk berpartisipasi dalam kelompok belajar atau bimbingan tambahan.\n"
-                else:
-                    explanation += "- Siswa dapat diberikan tantangan lebih lanjut, seperti proyek lanjutan atau kursus lanjutan.\n"
-
                 # Visualize CEFR and IQ for the selected student
                 fig, ax = plt.subplots(1, 2, figsize=(14, 6))
 
@@ -347,54 +264,10 @@ elif selected == "Visualisasi":
 
                 st.pyplot(fig)
 
-                # Display the explanation
-                st.markdown(explanation)
-
-        else:
-            st.warning("Silakan unggah data terlebih dahulu di menu 'Data Upload'.")
-
     else:
         st.warning("Silakan unggah data terlebih dahulu di menu 'Data Upload'.")
 
-# Additional Features
-    st.subheader("📊 Fitur Visualisasi Tambahan")
 
-    # Heatmap Korelasi
-    st.markdown("🌡️ Heatmap Korelasi")
-    corr = df_filtered[['GSE', 'Nilai_IQ', 'Listening', 'Reading', 'Speaking', 'Writing']].corr()
-    fig_corr, ax_corr = plt.subplots()
-    sns.heatmap(corr, annot=True, cmap="YlGnBu", ax=ax_corr)
-    ax_corr.set_title("Korelasi antara GSE, IQ, dan Kemampuan Bahasa")
-    st.pyplot(fig_corr)
-
-    # Word Cloud
-    if 'Komentar' in df_filtered.columns:
-        st.markdown("🌬️ Word Cloud Komentar Siswa")
-        comments = ' '.join(df_filtered['Komentar'].dropna())
-        wordcloud = WordCloud(width=800, height=400).generate(comments)
-        
-        plt.figure(figsize=(10, 5))
-        plt.imshow(wordcloud, interpolation='bilinear')
-        plt.axis('off')
-        st.pyplot(plt)
-
-    # Radar Chart for Skills
-    st.markdown("🛡️ Radar Chart Profil Kemampuan Siswa")
-    for student in selected_students:
-        student_data = df_filtered[df_filtered['Nama_Peserta'] == student][['Listening', 'Reading', 'Speaking', 'Writing']].mean()
-        values = student_data.values
-        values = np.concatenate((values, [values[0]]))  # Close the circle
-        angles = np.linspace(0, 2 * np.pi, len(student_data), endpoint=False).tolist()
-        angles += angles[:1]
-
-        fig_radar, ax_radar = plt.subplots(figsize=(6, 6), subplot_kw=dict(polar=True))
-        ax_radar.fill(angles, values, color='red', alpha=0.25)
-        ax_radar.set_yticklabels([])
-        ax_radar.set_xticks(angles[:-1])
-        ax_radar.set_xticklabels(student_data.index)
-        ax_radar.set_title(f"Profil Kemampuan: {student}")
-        st.pyplot(fig_radar)
-
-else:
-    st.warning("Silakan unggah data terlebih dahulu di menu 'Data Upload'.")
-
+elif selected == "Tentang":
+    st.title("ℹ️ Tentang Aplikasi")
+    st.markdown("Aplikasi ini bertujuan untuk memberikan analisis data siswa secara interaktif.")
