@@ -213,15 +213,24 @@ elif selected == "Visualisasi":
         for col in skill_cols:
             st.markdown(f"##### {col}")  # Subheader for each skill
             fig, ax = plt.subplots()  # Create a subplot
-            sns.countplot(data=df_filtered, x=col, palette='pastel', ax=ax)  # Count plot for each skill
+            
+            # Display unique values for debugging
+            unique_values = df_filtered[col].unique()
+            st.markdown(f"**Nilai unik untuk {col}**: {unique_values}")  # Show unique values for debugging
+            
+            # Count plot for each skill
+            sns.countplot(data=df_filtered, x=col, palette='pastel', ax=ax)  
             ax.set_title(f"Distribusi {col}", fontsize=14)  # Title for the plot
             ax.set_xlabel(col, fontsize=12)  # X-axis label
             ax.set_ylabel("Jumlah", fontsize=12)  # Y-axis label
             st.pyplot(fig)  # Display the plot
 
             # Explanation for Language Skills
-            skill_counts = df_filtered[col].value_counts()  # Count of language skills
-            st.markdown(f"**Jumlah Siswa per {col}**: {skill_counts.to_dict()}")  # Display counts
+            if df_filtered[col].notnull().any():  # Check if the column has any non-null values
+                skill_counts = df_filtered[col].value_counts()  # Count of language skills
+                st.markdown(f"**Jumlah Siswa per {col}**: {skill_counts.to_dict()}")  # Display counts
+            else:
+                st.markdown(f"**Tidak ada data untuk {col}.**")  # Handle case with no data
 
         # IQ & Kategori IQ
         st.markdown("#### 🧠 Distribusi IQ")  # Title for IQ distribution
