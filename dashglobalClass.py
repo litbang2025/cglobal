@@ -3,10 +3,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from streamlit_option_menu import option_menu
-from sklearn.cluster import KMeans
-from wordcloud import WordCloud
 import numpy as np
-import plotly.graph_objects as go
+from wordcloud import WordCloud
 
 # Set page configuration
 st.set_page_config(page_title="Analisis Lengkap Data Siswa", layout="wide")
@@ -93,11 +91,9 @@ if selected == "Dashboard":
         st.session_state.df['GSE'] = st.session_state.df['GSE'].apply(convert_gse_to_numeric)
 
         # Ensure other numeric columns are converted
-        st.session_state.df['Nilai_IQ'] = pd.to_numeric(st.session_state.df['Nilai_IQ'], errors='coerce')
-        st.session_state.df['Listening'] = pd.to_numeric(st.session_state.df['Listening'], errors='coerce')
-        st.session_state.df['Reading'] = pd.to_numeric(st.session_state.df['Reading'], errors='coerce')
-        st.session_state.df['Speaking'] = pd.to_numeric(st.session_state.df['Speaking'], errors='coerce')
-        st.session_state.df['Writing'] = pd.to_numeric(st.session_state.df['Writing'], errors='coerce')
+        numeric_columns = ['Nilai_IQ', 'Listening', 'Reading', 'Speaking', 'Writing']
+        for col in numeric_columns:
+            st.session_state.df[col] = pd.to_numeric(st.session_state.df[col], errors='coerce')
 
         # Example metrics based on the uploaded data
         total_students = len(st.session_state.df)
@@ -165,11 +161,9 @@ elif selected == "Visualisasi":
         st.session_state.df['GSE'] = st.session_state.df['GSE'].apply(convert_gse_to_numeric)
 
         # Ensure other numeric columns are converted
-        st.session_state.df['Nilai_IQ'] = pd.to_numeric(st.session_state.df['Nilai_IQ'], errors='coerce')
-        st.session_state.df['Listening'] = pd.to_numeric(st.session_state.df['Listening'], errors='coerce')
-        st.session_state.df['Reading'] = pd.to_numeric(st.session_state.df['Reading'], errors='coerce')
-        st.session_state.df['Speaking'] = pd.to_numeric(st.session_state.df['Speaking'], errors='coerce')
-        st.session_state.df['Writing'] = pd.to_numeric(st.session_state.df['Writing'], errors='coerce')
+        numeric_columns = ['Nilai_IQ', 'Listening', 'Reading', 'Speaking', 'Writing']
+        for col in numeric_columns:
+            st.session_state.df[col] = pd.to_numeric(st.session_state.df[col], errors='coerce')
 
         # Filter data
         with st.expander("🔍 Filter Data", expanded=True):
@@ -363,7 +357,7 @@ elif selected == "Visualisasi":
     st.markdown("🌡️ Heatmap Korelasi")
     corr = df_filtered[['GSE', 'Nilai_IQ', 'Listening', 'Reading', 'Speaking', 'Writing']].corr()
     fig_corr, ax_corr = plt.subplots()
-    sns.heatmap(corr, annot=True, cmap="YlGnBu", ax=ax_corr)
+    sns.heatmap(corr, annot=True, cmap="YlGn Bu, ax_corr)
     ax_corr.set_title("Korelasi antara GSE, IQ, dan Kemampuan Bahasa")
     st.pyplot(fig_corr)
 
@@ -458,7 +452,7 @@ elif selected == "Tentang":
     Semua hak dilindungi. Dilarang memperbanyak, mendistribusikan, atau 
     menggunakan bagian dari aplikasi ini tanpa izin tertulis dari pemilik hak cipta. 
     Penggunaan aplikasi ini sepenuhnya untuk tujuan pendidikan dan analisis data. 
-    Jika Anda memiliki pertanyaan atau memerlukan izin, silakan hubungi [kreatif.appmobile.gmailcom].
+    Jika Anda memiliki pertanyaan atau memerlukan izin, silakan hubungi [kreatif.appmobile.gmail.com].
     """)
 
     # Closing Remarks
