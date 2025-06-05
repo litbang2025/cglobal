@@ -399,5 +399,5 @@ else:
     st.warning("Silakan unggah data terlebih dahulu di menu 'Data Upload'.")
 
 elif selected == "Tentang":
-st.title("ℹ️ Tentang Aplikasi")
-st.markdown("Aplikasi ini bertujuan untuk memberikan analisis data siswa secara interaktif.")
+        st.title("ℹ️ Tentang Aplikasi")
+        st.markdown("Aplikasi ini bertujuan untuk memberikan analisis data siswa secara interaktif.")
